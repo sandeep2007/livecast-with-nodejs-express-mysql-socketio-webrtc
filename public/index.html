@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Cast</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <style>
+        /* width */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        /* Track */
+        ::-webkit-scrollbar-track {
+            background: #fff;
+        }
+
+        /* Handle */
+        ::-webkit-scrollbar-thumb {
+            background: #fff;
+        }
+
+        /* Handle on hover */
+        ::-webkit-scrollbar-thumb:hover {
+            background: #ccc;
+        }
+
+        .broadcaster {
+            display: none;
+        }
+
+        .watcher {
+            display: none;
+        }
+
+        .user-profile {
+            height: 36px;
+            width: 36px;
+            border: solid 1px #ccc;
+            border-radius: 50%;
+        }
+
+        .profile-status {
+            position: absolute;
+            bottom: 13px;
+            left: 46px;
+            font-size: 12px;
+        }
+
+        @media only screen and (max-width: 600px) {
+            .main-container {
+                width: 90vw !important
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link active" href="">Live Cast</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="javascript:{}" onclick="testConnection()">Test Connection</a>
+            </li>
+            <li class="nav-item" id="user-name" style="display:none">
+                <a class="nav-link" href="javascript:{}"></a>
+            </li>
+            <li class="nav-item" id="logout-btn" style="display:none">
+                <a class="nav-link" href="javascript:{}" onclick="logout()">Logout</a>
+            </li>
+
+        </ul>
+
+    </nav>
+
+    <div class="d-flex justify-content-center">
+        <div class="mt-5 main-container" style="width:50vw">
+
+            <div id="msg" style="height:70px"></div>
+            <div class="list-group" id="loggedin-user"></div>
+            <br />
+            <div class="list-group" id="user-list"></div>
+
+            <div class="jumbotron" id="login-form" style="display:none">
+                <h1>Login</h1>
+                <form onsubmit="login(this)">
+                    <div class="form-group">
+                        <label for="email">Email:</label>
+                        <input type="email" class="form-control" placeholder="Enter email" id="email" name="email">
+                    </div>
+                    <div class="form-group">
+                        <label for="pwd">Password:</label>
+                        <input type="password" class="form-control" placeholder="Enter password" id="pwd"
+                            name="password">
+                    </div>
+                    <div class="login-err float-right"></div>
+                    <button type="submit" class="btn btn-success">Login</button>
+                </form>
+            </div>
+            <br />
+            <!-- broadcaster -->
+            <div id="broadcaster" class="broadcaster">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="input-group mb-1">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    <i class="fa fa-volume-up" aria-hidden="true"></i>
+                                </span>
+                            </div>
+                            <select id="audioSource" class="form-control"></select>
+                        </div>
+
+                    </div>
+                    <div class="col-md-6">
+                        <div class="input-group mb-1">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fa fa-video-camera"
+                                        aria-hidden="true"></i></span>
+                            </div>
+                            <select id="videoSource" class="form-control"></select>
+                        </div>
+
+                    </div>
+                    <div class="col-md-6 mb-1">
+                        <button onclick="closeLiveStream()" type="button" class="btn btn-danger btn-sm btn-block">End
+                            Stream</button>
+                    </div>
+                    <div class="col-md-6 mb-1">
+                        <button class="btn btn-success btn-sm btn-block">Chat</button>
+                    </div>
+                    <div class="col-md-6 mb-1">
+                        <button onclick="startRecording()" class="btn btn-warning btn-sm btn-block">Start
+                            Record</button>
+                    </div>
+
+                    <div class="col-md-6 mb-1">
+                        <button onclick="stopRecording()" class="btn btn-warning btn-sm btn-block">Stop Record</button>
+                    </div>
+                    <div class="col-md-6 mb-1">
+                        <button onclick="downloadRecording()" class="btn btn-warning btn-sm btn-block">
+                            Download Recording</button>
+                    </div>
+                    <div class="col-md-6 mb-1">
+                        <button onclick="uploadRecording()" class="btn btn-warning btn-sm btn-block">
+                            Upload Recording</button>
+                    </div>
+                    <div class="col-md-12">
+                        <video class="img img-thumbnail" style="width: 100%;" id="broadcaster-view" playsinline autoplay
+                            muted></video>
+                    </div>
+
+                </div>
+            </div>
+
+
+            <!-- wather-->
+            <div id="watcher" class="watcher">
+                <div class="row">
+                    <div class="col-md-6 mb-1">
+                        <button onclick="closeWatchStream()" class="btn btn-block btn-sm btn-danger">Close</button>
+                    </div>
+                    <div class="col-md-6 mb-1">
+                        <button onclick="enableAudio()" id="enable-audio"
+                            class="btn btn-block btn-sm btn-success">Enable audio</button>
+                        <button onclick="disableAudio()" id="disable-audio" style="display:none"
+                            class="btn btn-block btn-sm btn-danger mt-0">Disable
+                            audio</button>
+                    </div>
+                    <div class="col-md-12">
+                        <video class="img img-thumbnail" style="width: 100%;" id="watcher-view" playsinline autoplay
+                            muted></video>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/app.js"></script>
+
+
+</body>
+
+</html>

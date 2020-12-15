@@ -1,0 +1,40 @@
+{
+  "name": "Livecast",
+  "version": "1.0.0",
+  "description": "WebRTC example for a video broadcast",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js --trace-warnings --unhandled-rejections=strict"
+  },
+  "keywords": [
+    "WebRTC",
+    "REST",
+    "Socket.io",
+    "NodeJs",
+    "Express",
+    "MySql"
+  ],
+  "author": "Sandeep Kumar",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "dateformat": "^3.0.3",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "fs": "^0.0.1-security",
+    "http": "^0.0.1-security",
+    "https": "^1.0.0",
+    "multer": "^1.4.2",
+    "mysql": "^2.18.1",
+    "nodemon": "^2.0.4",
+    "path": "^0.12.7",
+    "socket.io": "^2.3.0",
+    "uuid": "^8.3.2",
+    "validatorjs": "^3.19.2"
+  },
+  "devDependencies": {
+    "eslint": "7.0.0"
+  }
+}
