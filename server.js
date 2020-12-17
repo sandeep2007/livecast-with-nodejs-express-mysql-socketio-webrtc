@@ -105,6 +105,7 @@ io.sockets.on("connection", socket => {
         socket.userType = 'WATCHER';
         socket.castId = data.castId;
         socket.to(broadcaster.get(data.castId).socketId).emit("watcher", socket.id);
+       socket.emit('startWatch', { castId: data.castId, uniqCastId: broadcaster.get(socket.castId).uniqCastId, socketId: socket.id })
         userHandler.castRegister({ userId: socket.userData.id, recordType: 'WATCH', uniqCastId: broadcaster.get(data.castId).uniqCastId });
       });
 
