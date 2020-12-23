@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 15, 2020 at 04:27 PM
+-- Generation Time: Dec 23, 2020 at 08:06 AM
 -- Server version: 10.4.14-MariaDB
 -- PHP Version: 7.4.9
 
@@ -196,13 +196,13 @@ ALTER TABLE `ca_last_seen`
 -- AUTO_INCREMENT for table `ca_live_broadcaster`
 --
 ALTER TABLE `ca_live_broadcaster`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `ca_live_watcher`
 --
 ALTER TABLE `ca_live_watcher`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `ca_socket_users`
