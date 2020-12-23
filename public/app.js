@@ -141,6 +141,10 @@ setInterval(() => {
             console.log(data)
             uniqCastId = data.uniqCastId;
         })
+        
+         connection.socket.on('startWatch', (data) => {
+            console.log(data)
+        });
 
         //broadcaster events
         connection.socket.on("answer", (id, description) => {
