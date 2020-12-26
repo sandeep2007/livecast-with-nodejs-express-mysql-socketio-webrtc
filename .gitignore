@@ -5,7 +5,7 @@
 /uploads
 
 # Ignore files related to API keys
-.env
+#.env
 
 # Logs
 logs

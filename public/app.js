@@ -6,6 +6,11 @@ const config = {
         {
             "urls": "stun:stun.l.google.com:19302",
         },
+        {
+            "urls": "turn:turn.rajasthanstore.com:5349",
+            "username": "sandeep",
+            "credential": "qaz@123"
+        }
         // { 
         //   "urls": "turn:TURN_IP?transport=tcp",
         //   "username": "TURN_USERNAME",
@@ -13,6 +18,38 @@ const config = {
         // }
     ]
 };
+
+
+function setBandwidth(sdp) {
+
+    // var bandwidth = {
+    //     screen: 1, // 300kbits minimum
+    //     audio: 1,   // 50kbits  minimum
+    //     video: 100   // 256kbits (both min-max)
+    // };
+    // var isScreenSharing = false;
+
+    //return sdp = BandwidthHandler.setApplicationSpecificBandwidth(sdp, bandwidth, isScreenSharing);
+    // return sdp = BandwidthHandler.setVideoBitrates(sdp, {
+    //     min: bandwidth.video,
+    //     max: bandwidth.video
+    // });
+    // return sdp = BandwidthHandler.setOpusAttributes(sdp, {
+    //     'maxaveragebitrate': 20 * 1024 * 8, // 500 kbits
+    //     'maxplaybackrate': 20 * 1024 * 8, // 500 kbits 
+    // });
+    // return sdp = BandwidthHandler.setOpusAttributes(sdp, {
+    //     'stereo': 0, // to disable stereo (to force mono audio)
+    //     'sprop-stereo': 1,
+    //     'maxaveragebitrate': 20 * 1024 * 8, // 500 kbits
+    //     'maxplaybackrate': 20 * 1024 * 8, // 500 kbits
+    //     // 'cbr': 0, // disable cbr
+    //     // 'useinbandfec': 1, // use inband fec
+    //     // 'usedtx': 1, // use dtx
+    //     // 'maxptime': 3
+    // });
+    return sdp;
+}
 
 
 connection = {};
@@ -141,8 +178,8 @@ setInterval(() => {
             console.log(data)
             uniqCastId = data.uniqCastId;
         })
-        
-         connection.socket.on('startWatch', (data) => {
+
+        connection.socket.on('startWatch', (data) => {
             console.log(data)
         });
 
@@ -167,7 +204,10 @@ setInterval(() => {
 
             peerConnection
                 .createOffer()
-                .then(sdp => peerConnection.setLocalDescription(sdp))
+                .then(sdp => {
+                    sdp.sdp = setBandwidth(sdp.sdp);
+                    return peerConnection.setLocalDescription(sdp)
+                })
                 .then(() => {
                     connection.socket.emit("offer", id, peerConnection.localDescription);
                 });
@@ -214,7 +254,10 @@ setInterval(() => {
             peerConnection
                 .setRemoteDescription(description)
                 .then(() => peerConnection.createAnswer())
-                .then(sdp => peerConnection.setLocalDescription(sdp))
+                .then(sdp => {
+                    sdp.sdp = setBandwidth(sdp.sdp);
+                    return peerConnection.setLocalDescription(sdp)
+                })
                 .then(() => {
                     connection.socket.emit("answer", id, peerConnection.localDescription);
                 });

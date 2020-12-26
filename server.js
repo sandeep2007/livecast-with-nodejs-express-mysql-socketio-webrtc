@@ -17,10 +17,11 @@ const privateKey = fs.readFileSync(path.join(__dirname, 'cert', 'selfsigned.key'
 
 const credentials = { key: privateKey, cert: certificate };
 
-//const http = require('https').createServer(credentials, app);
+// const http = require('https').createServer(credentials, app);
 const http = require('http').createServer(app);
 
 const host = '127.0.0.1';
+// const host = '192.168.68.109';
 
 const userHandler = require('./lib/userHandler');
 
@@ -105,7 +106,7 @@ io.sockets.on("connection", socket => {
         socket.userType = 'WATCHER';
         socket.castId = data.castId;
         socket.to(broadcaster.get(data.castId).socketId).emit("watcher", socket.id);
-       socket.emit('startWatch', { castId: data.castId, uniqCastId: broadcaster.get(socket.castId).uniqCastId, socketId: socket.id })
+        socket.emit('startWatch', { castId: data.castId, uniqCastId: broadcaster.get(socket.castId).uniqCastId, socketId: socket.id })
         userHandler.castRegister({ userId: socket.userData.id, recordType: 'WATCH', uniqCastId: broadcaster.get(data.castId).uniqCastId });
       });
 
